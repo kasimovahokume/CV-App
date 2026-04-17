@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import styles from "./Input.module.css";
 
-export const Input = ({label, id, type = "text", ...props}) => {
+const Input = ({label, id, type = "text", ...props}) => {
   return (
       <div className={styles.inputContainer}>
         <input
@@ -28,3 +28,4 @@ Input.propTypes = {
     id: PropTypes.string.isRequired,
     type: PropTypes.string
 }
+export default Input;

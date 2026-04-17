@@ -1,0 +1,11 @@
+.container { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-bottom: 15px; }
+.label { font-size: 13px; font-weight: 600; color: #555; }
+.textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-height: 80px;
+  resize: vertical;
+  font-family: inherit;
+}
+.textarea:focus { border-color: #8e26e2; outline: none; }

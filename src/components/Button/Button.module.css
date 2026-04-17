@@ -1,0 +1,44 @@
+.kreativBtn {
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  position: relative;
+  width: 160px;
+  height: 48px;
+  display: inline-block;
+  margin: 10px;
+  padding: 0;
+}
+
+.save { --main-color: #8e26e2; --light-color: #f4b1fd; --dark-color: #5e2b83; }
+.reset { --main-color: #2563eb; --light-color: #93c5fd; --dark-color: #1e3a8a; }
+
+.bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: var(--dark-color);
+  z-index: -1;
+  opacity: 0.3;
+  transform: translateY(3px);
+}
+
+.wrap {
+  border-radius: 8px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--light-color), var(--main-color));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.buttonText {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.kreativBtn:hover .wrap { transform: translateY(-2px); }
