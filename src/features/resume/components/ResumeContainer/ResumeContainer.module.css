@@ -1,9 +1,26 @@
-.InputDesign{
-    padding: 40px;
-    max-width: 500px;
+.root {
+  display: flex;
+  height: 100vh;
+  gap: 20px;
+  background-color: #f0f2f5;
+  padding: 20px;
 }
 
-.InputTitle{
-    margin-bottom: 30px;
-    color: #333;
+.formPanel {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.previewPanel {
+  flex: 1;
+  background: #525659;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
 }
