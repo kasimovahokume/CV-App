@@ -7,13 +7,13 @@ import Button from "../../../../components/Button";
 
 const initialValues = {
   fullName: "",
-  age: "",
   position: "",
   experience: "",
   email: "",
   phone: "",
   location: "",
-  website: "",
+  linkedin: "",
+  github: "",
   summary: "",
   currentCompany: "",
   currentRole: "",
@@ -25,6 +25,9 @@ const initialValues = {
   graduationYear: "",
   languages: "",
   profileImage: "",
+  certifications: "",
+  projects: "",
+  references: "",
 };
 
 export const ResumeForm = ({ setData }) => {
@@ -35,64 +38,69 @@ export const ResumeForm = ({ setData }) => {
     },
   });
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formik.setFieldValue("profileImage", reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFullReset = () => {
+    formik.resetForm();
+    setData({});
+  };
+
   return (
-    <form className={styles.form} onSubmit={formik.handleSubmit}>
+    <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
       <h2 className={styles.mainTitle}>Personal Information</h2>
+
       <div className={styles.imageUploadSection}>
-        <label>Profile Picture</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => {
-            const file = e.target.files[0];
-            if (file) {
+        <label className={styles.uploadLabel}>Profile Picture</label>
+        <div className={styles.customFileUploadWrapper}>
+          <input
+            type="file"
+            id="profile-image-input"
+            accept="image/*"
+            onChange={handleImageChange}
+            className={styles.hiddenFileInput}
+          />
+          <label htmlFor="profile-image-input" className={styles.customUploadBtn}>
+            <i className="fa-solid fa-cloud-arrow-up"></i>
+            {formik.values.profileImage ? "Change Photo" : "Upload Photo"}
+          </label>
+        </div>
 
-              const validTypes = ["image/jpeg", "image/jpg", "image/png"];
-              if (!validTypes.includes(file.type)) {
-                alert("Zəhmət olmasa JPG və ya PNG formatında şəkil seçin.");
-                return;
-              }
-
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                // Bura çox önəmlidir: reader.result artıq formatı bəlli olan şərqidir
-                formik.setFieldValue("profileImage", reader.result);
-              };
-              reader.readAsDataURL(file);
-            }
-          }}
-        />
+        {formik.values.profileImage && (
+          <div className={styles.imagePreview}>
+            <img src={formik.values.profileImage} alt="Preview" />
+            <button
+              type="button"
+              onClick={() => formik.setFieldValue("profileImage", "")}
+              className={styles.removeImageBtn}
+            >
+              Sil
+            </button>
+          </div>
+        )}
       </div>
+
       <div className={styles.row}>
         <Input
-          label="Full Name"
+          label="Full Name *"
           name="fullName"
           placeholder="e.g. John Doe"
           value={formik.values.fullName}
           onChange={formik.handleChange}
         />
         <Input
-          label="Age"
-          name="age"
-          placeholder="e.g. 20"
-          value={formik.values.age}
-          onChange={formik.handleChange}
-        />
-      </div>
-
-      <div className={styles.row}>
-        <Input
           label="Position"
           name="position"
           placeholder="e.g. Frontend Developer"
           value={formik.values.position}
-          onChange={formik.handleChange}
-        />
-        <Input
-          label="Years of Experience"
-          name="experience"
-          placeholder="e.g. 1 Year / Junior"
-          value={formik.values.experience}
           onChange={formik.handleChange}
         />
       </div>
@@ -101,6 +109,7 @@ export const ResumeForm = ({ setData }) => {
         <Input
           label="Email"
           name="email"
+          type="email"
           placeholder="example@domain.com"
           value={formik.values.email}
           onChange={formik.handleChange}
@@ -123,30 +132,48 @@ export const ResumeForm = ({ setData }) => {
           onChange={formik.handleChange}
         />
         <Input
-          label="Website/GitHub"
-          name="website"
+          label="Years of Experience"
+          name="experience"
+          placeholder="e.g. 1 Year / Junior"
+          value={formik.values.experience}
+          onChange={formik.handleChange}
+        />
+      </div>
+
+      <div className={styles.row}>
+        <Input
+          label="LinkedIn Profile"
+          name="linkedin"
+          placeholder="linkedin.com/in/username"
+          value={formik.values.linkedin}
+          onChange={formik.handleChange}
+        />
+        <Input
+          label="GitHub Profile"
+          name="github"
           placeholder="github.com/username"
-          value={formik.values.website}
+          value={formik.values.github}
           onChange={formik.handleChange}
         />
       </div>
 
       <h2 className={styles.mainTitle}>Summary & Skills</h2>
+
       <Textarea
         label="Professional Summary"
         name="summary"
-        placeholder="Ambitious Frontend Developer with a focus on React.js. Passionate about building clean, functional, and user-friendly web applications with modern UI/UX standards."
+        placeholder="Ambitious Frontend Developer with a focus on React.js..."
         value={formik.values.summary}
         onChange={formik.handleChange}
       />
 
       <div className={styles.row}>
         <Input
-          label="Skills (vergüllə)"
+          label="Skills (vergüllə ayırın)"
           name="skills"
           value={formik.values.skills}
           onChange={formik.handleChange}
-          placeholder="React, JS, CSS"
+          placeholder="React, JavaScript, CSS, HTML, Git"
         />
         <Input
           label="Languages"
@@ -157,40 +184,43 @@ export const ResumeForm = ({ setData }) => {
         />
       </div>
 
-      <h2 className={styles.mainTitle}>Last Experience</h2>
+      <h2 className={styles.mainTitle}>Work Experience</h2>
+
       <div className={styles.row}>
         <Input
-          label="Company name"
+          label="Company Name"
           name="currentCompany"
           placeholder="e.g. Tech Solutions Inc."
           value={formik.values.currentCompany}
           onChange={formik.handleChange}
         />
         <Input
-          label="Role"
+          label="Job Title"
           name="currentRole"
-          placeholder="e.g. Frontend Intern"
+          placeholder="e.g. Frontend Developer"
           value={formik.values.currentRole}
           onChange={formik.handleChange}
         />
       </div>
+
       <Input
         label="Period"
         name="period"
         placeholder="Jan 2024 - Present"
         value={formik.values.period}
         onChange={formik.handleChange}
-        placeholder="2022 - Present"
       />
+
       <Textarea
         label="Job Description"
         name="jobDescription"
-        placeholder="Developing responsive UI components, integrating RESTful APIs, and collaborating with design teams to improve user experience."
+        placeholder="Developing responsive UI components..."
         value={formik.values.jobDescription}
         onChange={formik.handleChange}
       />
 
       <h2 className={styles.mainTitle}>Education</h2>
+
       <div className={styles.row}>
         <Input
           label="School/University"
@@ -202,11 +232,12 @@ export const ResumeForm = ({ setData }) => {
         <Input
           label="Degree"
           name="degree"
-          placeholder="e.g. Computer Science"
+          placeholder="e.g. Bachelor in Computer Science"
           value={formik.values.degree}
           onChange={formik.handleChange}
         />
       </div>
+
       <Input
         label="Graduation Year"
         name="graduationYear"
@@ -215,8 +246,34 @@ export const ResumeForm = ({ setData }) => {
         onChange={formik.handleChange}
       />
 
+      <h2 className={styles.mainTitle}>Additional Information</h2>
+
+      <Input
+        label="Certifications"
+        name="certifications"
+        placeholder="e.g. AWS Certified Developer"
+        value={formik.values.certifications}
+        onChange={formik.handleChange}
+      />
+
+      <Textarea
+        label="Projects"
+        name="projects"
+        placeholder="E-commerce platform using React..."
+        value={formik.values.projects}
+        onChange={formik.handleChange}
+      />
+
+      <Textarea
+        label="References"
+        name="references"
+        placeholder="Available upon request"
+        value={formik.values.references}
+        onChange={formik.handleChange}
+      />
+
       <div className={styles.actions}>
-        <Button onClick={formik.handleReset} variant="reset" type="button">
+        <Button onClick={handleFullReset} variant="reset" type="button">
           Reset
         </Button>
         <Button type="submit" variant="save">
@@ -224,7 +281,6 @@ export const ResumeForm = ({ setData }) => {
         </Button>
       </div>
     </form>
-    
   );
 };
 
